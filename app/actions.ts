@@ -74,6 +74,40 @@ export async function addSale(formData: {
   }
 }
 
+export async function updateSale(
+  id: string,
+  formData: { productName: string; amount: number; paymentType: PaymentType }
+): Promise<{ success: boolean; entries: SaleEntry[]; error?: string }> {
+  try {
+    const amount = Number(formData.amount) || 0;
+    if (amount <= 0) {
+      const { entries } = await getSales();
+      return { success: false, entries, error: "Amount must be greater than 0" };
+    }
+    const coll = await getSalesCollection();
+    await coll.updateOne(
+      { id },
+      {
+        $set: {
+          productName: (formData.productName ?? "").trim(),
+          amount,
+          paymentType: formData.paymentType ?? "cash",
+        },
+      }
+    );
+    const { entries } = await getSales();
+    return { success: true, entries };
+  } catch (e) {
+    console.error("updateSale error:", e);
+    const { entries, error: loadError } = await getSales();
+    return {
+      success: false,
+      entries,
+      error: e instanceof Error ? e.message : loadError ?? "Failed to update sale",
+    };
+  }
+}
+
 export async function deleteSale(
   id: string
 ): Promise<{ success: boolean; entries: SaleEntry[]; error?: string }> {
