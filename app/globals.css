@@ -1,8 +1,19 @@
 @import "tailwindcss";
 
+/* Light theme: full white page */
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --foreground-muted: #52525b;
+  --accent: #0d9488;
+  --accent-muted: #ccfbf1;
+  --card: #ffffff;
+  --border: #e4e4e7;
+}
+
+/* Prevent dark mode override - keep light theme */
+html {
+  color-scheme: light;
 }
 
 @theme inline {
@@ -12,15 +23,10 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
+  background: #ffffff;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 18px;
+  line-height: 1.5;
 }
